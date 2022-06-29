@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,6 +21,7 @@ public class UserController {
 
     @PostMapping("user/save")
     public ResponseEntity<User>saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.saveUser(user));
+        URI uri=URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/save").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 }
