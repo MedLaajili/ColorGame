@@ -25,7 +25,7 @@ public class ColorGameApplication {
 	@Bean
 	CommandLineRunner run(UserService userService){
 		return args -> {
-			userService.saveUser(new User(null,"mohamed.laajili@polytechnicien.tn","50185440",null));
+			userService.saveUser(new User(null,"mohamed.laajili@polytechnicien.tn","50185440","USER"));
 		};
 	}
 
