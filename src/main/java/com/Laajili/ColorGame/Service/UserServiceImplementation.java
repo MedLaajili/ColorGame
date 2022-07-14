@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class UserServiceImplementation implements UserService, UserDetailsService {
@@ -30,14 +31,26 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
             log.info("User found in the database: {}", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        org.springframework.security.core.userdetails.User user1 = new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
-        return user1;
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authorities);
     }
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database",user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
+    }
+
+    @Override
+    public User getUser(String username) {
+        log.info("fetching user {}",username);
+        return userRepo.findByUsername((username));
+    }
+
+    @Override
+    public List<User> getUsers() {
+        log.info("fetching all users");
+        return userRepo.findAll();
     }
 
 

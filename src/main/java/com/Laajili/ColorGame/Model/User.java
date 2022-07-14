@@ -15,4 +15,10 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private String role = "USER";
+
+
+//    public void setRole(String role) {
+//        this.role = "USER";
+//    }
 }
