@@ -1,6 +1,7 @@
 package com.Laajili.ColorGame.security;
 
 import com.Laajili.ColorGame.filter.CustomAuthFilter;
+import com.Laajili.ColorGame.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+@CrossOrigin("http://localhost:4200")
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
@@ -30,9 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             customAuthFilter.setFilterProcessesUrl("/api/login");
             http.csrf().disable();
             http.sessionManagement().sessionCreationPolicy(STATELESS);
-            http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-            http.authorizeRequests().anyRequest().authenticated();
+            http.authorizeRequests().antMatchers("/api/login/**","/api/register").permitAll();
+            http.authorizeRequests().antMatchers("/api/user/**").authenticated();
             http.addFilter(customAuthFilter);
+            http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

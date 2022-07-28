@@ -2,6 +2,7 @@ package com.Laajili.ColorGame.Service;
 
 import com.Laajili.ColorGame.Model.User;
 import com.Laajili.ColorGame.Model.UserRepo;
+import com.Laajili.ColorGame.filter.CustomAuthFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,6 +39,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
     public User saveUser(User user) {
         log.info("Saving new user {} to the database",user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         return userRepo.save(user);
     }
 
